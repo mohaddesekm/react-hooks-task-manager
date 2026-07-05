@@ -1,7 +1,7 @@
 export default function Header() {
     return (
-        <div className="border-b bg-white">
-            <div className="flex justify-between items-center h-16">
+        <div className="border-b bg-white rounded-lg">
+            <div className="flex justify-between items-center p-4 ">
                 <div>
                     <h1 className="text-2xl font-bold">
                         React Hooks Task Manager
