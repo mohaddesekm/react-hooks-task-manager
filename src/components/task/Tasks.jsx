@@ -1,9 +1,30 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '../ui/button';
+// import { useEffect } from 'react';
 
 export default function Tasks() {
     const [taskTitle, setTaskTitle] = useState('');
     const [tasks, setTasks] = useState([]);
+    const [isLoaded, setIsLoaded] = useState(false);
+
+    // const [tasks, setTasks] = useState(() => {
+    //     const savedTasks = localStorage.getItem('tasks');
+    //     return savedTasks ? JSON.parse(savedTasks) : [];
+    // });
+
+    useEffect(() => {
+        const savedTasks = localStorage.getItem('tasks');
+
+        if (savedTasks) {
+            setTasks(JSON.parse(savedTasks));
+        }
+        setIsLoaded(true);
+    }, []);
+
+    useEffect(() => {
+        if (!isLoaded) return;
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }, [tasks, isLoaded]);
 
     const handleAddTask = () => {
         const title = taskTitle.trim();
@@ -19,7 +40,7 @@ export default function Tasks() {
         }
     };
 
-    const handlerKeyPress = (event) => {
+    const handlerKeyDown = (event) => {
         if (event.code === 'Enter') {
             handleAddTask();
         }
@@ -46,7 +67,7 @@ export default function Tasks() {
                     value={taskTitle}
                     onChange={(e) => setTaskTitle(e.target.value)}
                     placeholder="What needs to be done?"
-                    onKeyPress={() => handlerKeyPress(event)}
+                    onKeyDown={handlerKeyDown}
                 />
 
                 <Button onClick={handleAddTask}>Add Task</Button>
@@ -63,15 +84,15 @@ export default function Tasks() {
                         >
                             {task.title}
                         </span>
-                        <div className='flex gap-2'>
+                        <div className="flex gap-2">
                             <Button
                                 variant={
-                                    task.completed ? 'secondry' : 'default'
+                                    task.completed ? 'secondary' : 'default'
                                 }
                                 onClick={() => handlerCompleted(task.id)}
-                                className='border border-gray-300'
+                                className=""
                             >
-                                {task.completed ? 'Uncompleted' : 'Completed'}
+                                {task.completed ? 'Undo' : 'Done'}
                             </Button>
                             <Button onClick={() => handlerRemoveTask(task.id)}>
                                 Remove
