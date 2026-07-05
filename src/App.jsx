@@ -3,7 +3,7 @@ import './App.css';
 export default function App() {
     return (
     <>
-      App
+      <h1 className='flex justify-center m-auto'>App</h1>
     </>
     );
 }
