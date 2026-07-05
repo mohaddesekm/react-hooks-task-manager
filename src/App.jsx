@@ -1,9 +1,10 @@
 import './App.css';
+import AppLayout from './components/layout/AppLayout';
 
 export default function App() {
     return (
-    <>
-      <h1 className='flex justify-center m-auto'>App</h1>
-    </>
+        <>
+            <AppLayout />
+        </>
     );
 }
