@@ -64,6 +64,16 @@ export default function Tasks() {
         );
     }, [tasks, search]);
 
+    const totalTasks = tasks.length;
+
+    const completedTasks = useMemo(() => {
+        return tasks.filter((task) => task.completed).length;
+    }, [tasks]);
+
+    const pendingTasks = useMemo(() => {
+        return tasks.filter((task) => !task.completed).length;
+    }, [tasks]);
+
     return (
         <section className="mt-8 rounded-lg bg-white shadow">
             <div className="flex gap-4 items-center p-4">
@@ -115,6 +125,23 @@ export default function Tasks() {
                     </li>
                 ))}
             </ul>
+
+            <div className="grid grid-cols-3 gap-4 p-4 border-t">
+                <div className="rounded-lg border p-4 text-center">
+                    <p className="text-sm text-gray-500">Total</p>
+                    <h3 className="text-2xl font-bold">{totalTasks}</h3>
+                </div>
+
+                <div className="rounded-lg border p-4 text-center">
+                    <p className="text-sm text-gray-500">Completed</p>
+                    <h3 className="text-2xl font-bold">{completedTasks}</h3>
+                </div>
+
+                <div className="rounded-lg border p-4 text-center">
+                    <p className="text-sm text-gray-500">Pending</p>
+                    <h3 className="text-2xl font-bold">{pendingTasks}</h3>
+                </div>
+            </div>
         </section>
     );
 }
