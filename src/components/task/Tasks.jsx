@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Button } from '../ui/button';
-// import { useEffect } from 'react';
 
 export default function Tasks() {
     const [taskTitle, setTaskTitle] = useState('');
     const [tasks, setTasks] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [search, setSearch] = useState('');
 
     // const [tasks, setTasks] = useState(() => {
     //     const savedTasks = localStorage.getItem('tasks');
@@ -58,6 +58,12 @@ export default function Tasks() {
         );
     };
 
+    const filteredTasks = useMemo(() => {
+        return tasks.filter((task) =>
+            task.title.toLowerCase().includes(search.toLowerCase()),
+        );
+    }, [tasks, search]);
+
     return (
         <section className="mt-8 rounded-lg bg-white shadow">
             <div className="flex gap-4 items-center p-4">
@@ -73,8 +79,16 @@ export default function Tasks() {
                 <Button onClick={handleAddTask}>Add Task</Button>
             </div>
 
+            <input
+                type="text"
+                className="w-full rounded-md bg-white p-4 outline-none"
+                placeholder="Search tasks..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+            />
+
             <ul className={`${tasks.length && 'p-4'}`}>
-                {tasks.map((task) => (
+                {filteredTasks.map((task) => (
                     <li
                         key={task.id}
                         className="mt-3 flex justify-between items-center rounded-lg border bg-white p-4"
