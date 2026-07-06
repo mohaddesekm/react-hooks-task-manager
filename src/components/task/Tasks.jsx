@@ -7,6 +7,7 @@ export default function Tasks() {
     const [tasks, setTasks] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
     const [search, setSearch] = useState('');
+    const [filter, setFilter] = useState('all');
 
     // const [tasks, setTasks] = useState(() => {
     //     const savedTasks = localStorage.getItem('tasks');
@@ -65,10 +66,20 @@ export default function Tasks() {
     );
 
     const filteredTasks = useMemo(() => {
-        return tasks.filter((task) =>
+        let resault = tasks.filter((task) =>
             task.title.toLowerCase().includes(search.toLowerCase()),
         );
-    }, [tasks, search]);
+
+        if (filter === 'active') {
+            resault = resault.filter((task) => !task.completed);
+        }
+
+        if (filter === 'completed') {
+            resault = resault.filter((task) => task.completed);
+        }
+
+        return resault;
+    }, [tasks, search, filter]);
 
     const totalTasks = tasks.length;
 
@@ -102,6 +113,27 @@ export default function Tasks() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
             />
+
+            <div className="flex gap-2 px-4 pb-2">
+                <Button
+                    onClick={() => setFilter('all')}
+                    variant={filter === 'all' ? 'default' : 'outline'}
+                >
+                    All
+                </Button>
+                <Button
+                    onClick={() => setFilter('active')}
+                    variant={filter === 'active' ? 'default' : 'outline'}
+                >
+                    Active
+                </Button>
+                <Button
+                    onClick={() => setFilter('completed')}
+                    variant={filter === 'completed' ? 'default' : 'outline'}
+                >
+                    Completed
+                </Button>
+            </div>
 
             <ul className={`${tasks.length && 'p-4'}`}>
                 {filteredTasks.map((task) => (
