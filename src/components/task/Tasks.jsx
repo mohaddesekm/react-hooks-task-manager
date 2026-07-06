@@ -66,10 +66,20 @@ export default function Tasks() {
     );
 
     const filteredTasks = useMemo(() => {
-        return tasks.filter((task) =>
+        let resault = tasks.filter((task) =>
             task.title.toLowerCase().includes(search.toLowerCase()),
         );
-    }, [tasks, search]);
+
+        if (filter === 'active') {
+            resault = resault.filter((task) => !task.completed);
+        }
+
+        if (filter === 'completed') {
+            resault = resault.filter((task) => task.completed);
+        }
+
+        return resault;
+    }, [tasks, search, filter]);
 
     const totalTasks = tasks.length;
 
