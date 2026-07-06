@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Button } from '../ui/button';
 import TaskItem from './TaskItem';
 
@@ -47,17 +47,22 @@ export default function Tasks() {
         }
     };
 
-    const handlerRemoveTask = (id) => {
+    const handlerRemoveTask = useCallback((id) => {
         setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
-    };
+    }, []);
 
-    const handlerCompleted = (id) => {
-        setTasks(
-            tasks.map((task) =>
-                task.id === id ? { ...task, completed: !task.completed } : task,
-            ),
-        );
-    };
+    const handlerCompleted = useCallback(
+        (id) => {
+            setTasks(
+                tasks.map((task) =>
+                    task.id === id
+                        ? { ...task, completed: !task.completed }
+                        : task,
+                ),
+            );
+        },
+        [tasks],
+    );
 
     const filteredTasks = useMemo(() => {
         return tasks.filter((task) =>
