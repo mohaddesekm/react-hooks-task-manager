@@ -2,8 +2,6 @@ import { Button } from '../ui/button';
 import { memo } from 'react';
 
 function TaskItem({ task, onRemove, onToggle }) {
-    console.log(`Render: ${task.title}`);
-    
     return (
         <li className="mt-3 flex justify-between items-center rounded-lg border bg-white p-4">
             <span className={`${task.completed && 'opacity-50 line-through'}`}>
