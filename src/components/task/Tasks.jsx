@@ -1,5 +1,6 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Button } from '../ui/button';
+import TaskItem from './TaskItem';
 
 export default function Tasks() {
     const [taskTitle, setTaskTitle] = useState('');
@@ -46,17 +47,22 @@ export default function Tasks() {
         }
     };
 
-    const handlerRemoveTask = (id) => {
+    const handlerRemoveTask = useCallback((id) => {
         setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
-    };
+    }, []);
 
-    const handlerCompleted = (id) => {
-        setTasks(
-            tasks.map((task) =>
-                task.id === id ? { ...task, completed: !task.completed } : task,
-            ),
-        );
-    };
+    const handlerCompleted = useCallback(
+        (id) => {
+            setTasks(
+                tasks.map((task) =>
+                    task.id === id
+                        ? { ...task, completed: !task.completed }
+                        : task,
+                ),
+            );
+        },
+        [tasks],
+    );
 
     const filteredTasks = useMemo(() => {
         return tasks.filter((task) =>
@@ -99,30 +105,12 @@ export default function Tasks() {
 
             <ul className={`${tasks.length && 'p-4'}`}>
                 {filteredTasks.map((task) => (
-                    <li
+                    <TaskItem
                         key={task.id}
-                        className="mt-3 flex justify-between items-center rounded-lg border bg-white p-4"
-                    >
-                        <span
-                            className={`${task.completed && 'opacity-50 line-through'}`}
-                        >
-                            {task.title}
-                        </span>
-                        <div className="flex gap-2">
-                            <Button
-                                variant={
-                                    task.completed ? 'secondary' : 'default'
-                                }
-                                onClick={() => handlerCompleted(task.id)}
-                                className=""
-                            >
-                                {task.completed ? 'Undo' : 'Done'}
-                            </Button>
-                            <Button onClick={() => handlerRemoveTask(task.id)}>
-                                Remove
-                            </Button>
-                        </div>
-                    </li>
+                        task={task}
+                        onToggle={handlerCompleted}
+                        onRemove={handlerRemoveTask}
+                    />
                 ))}
             </ul>
 
