@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Button } from '../ui/button';
 import TaskItem from './TaskItem';
+import { ClipboardList, SearchX } from 'lucide-react';
 
 export default function Tasks() {
     const [taskTitle, setTaskTitle] = useState('');
@@ -91,6 +92,8 @@ export default function Tasks() {
         return tasks.filter((task) => !task.completed).length;
     }, [tasks]);
 
+    const isSearching = search.trim() !== '' || filter !== 'all';
+
     return (
         <section className="mt-8 rounded-lg bg-white shadow">
             <div className="flex gap-4 items-center p-4">
@@ -108,7 +111,7 @@ export default function Tasks() {
 
             <input
                 type="text"
-                className="w-full rounded-md bg-white p-4 outline-none"
+                className="w-full rounded-md bg-white px-4 pb-6 outline-none"
                 placeholder="Search tasks..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -135,33 +138,57 @@ export default function Tasks() {
                 </Button>
             </div>
 
-            <ul className={`${tasks.length && 'p-4'}`}>
-                {filteredTasks.map((task) => (
-                    <TaskItem
-                        key={task.id}
-                        task={task}
-                        onToggle={handlerCompleted}
-                        onRemove={handlerRemoveTask}
-                    />
-                ))}
-            </ul>
+            {filteredTasks.length ? (
+                <ul className={`${tasks.length && 'p-4'}`}>
+                    {filteredTasks.map((task) => (
+                        <TaskItem
+                            key={task.id}
+                            task={task}
+                            onToggle={handlerCompleted}
+                            onRemove={handlerRemoveTask}
+                        />
+                    ))}
+                </ul>
+            ) : (
+                <div className="flex flex-col items-center justify-center py-16 text-center">
+                    {isSearching ? (
+                        <SearchX className="mb-4 h-14 w-14 text-gray-300" />
+                    ) : (
+                        <ClipboardList className="mb-4 h-14 w-14 text-gray-300" />
+                    )}
 
-            <div className="grid grid-cols-3 gap-4 p-4 border-t">
-                <div className="rounded-lg border p-4 text-center">
-                    <p className="text-sm text-gray-500">Total</p>
-                    <h3 className="text-2xl font-bold">{totalTasks}</h3>
-                </div>
+                    <h3 className="text-xl font-semibold">
+                        {isSearching ? 'No matching tasks' : 'No tasks yet'}
+                    </h3>
 
-                <div className="rounded-lg border p-4 text-center">
-                    <p className="text-sm text-gray-500">Completed</p>
-                    <h3 className="text-2xl font-bold">{completedTasks}</h3>
+                    <p className="mt-2 text-gray-500">
+                        {isSearching
+                            ? 'Try changing your search or filter.'
+                            : 'Add your first task to get started.'}
+                    </p>
                 </div>
+            )}
 
-                <div className="rounded-lg border p-4 text-center">
-                    <p className="text-sm text-gray-500">Pending</p>
-                    <h3 className="text-2xl font-bold">{pendingTasks}</h3>
+            {filteredTasks.length ? (
+                <div className="grid grid-cols-3 gap-4 p-4 border-t">
+                    <div className="rounded-lg border p-4 text-center">
+                        <p className="text-sm text-gray-500">Total</p>
+                        <h3 className="text-2xl font-bold">{totalTasks}</h3>
+                    </div>
+
+                    <div className="rounded-lg border p-4 text-center">
+                        <p className="text-sm text-gray-500">Completed</p>
+                        <h3 className="text-2xl font-bold">{completedTasks}</h3>
+                    </div>
+
+                    <div className="rounded-lg border p-4 text-center">
+                        <p className="text-sm text-gray-500">Pending</p>
+                        <h3 className="text-2xl font-bold">{pendingTasks}</h3>
+                    </div>
                 </div>
-            </div>
+            ) : (
+                ''
+            )}
         </section>
     );
 }
