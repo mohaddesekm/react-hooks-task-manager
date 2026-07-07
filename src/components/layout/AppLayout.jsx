@@ -1,11 +1,11 @@
 import Tasks from '../task/Tasks';
 import Header from './Header';
 
-export default function AppLayout() {
+export default function AppLayout({ theme, setTheme }) {
     return (
         <main className="min-h-screen mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 pt-4">
-            <Header />
-            <Tasks/>
+            <Header theme={theme} setTheme={setTheme} />
+            <Tasks />
         </main>
     );
 }
