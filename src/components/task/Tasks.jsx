@@ -99,7 +99,7 @@ export default function Tasks() {
             <div className="flex gap-4 items-center p-4">
                 <input
                     type="text"
-                    className="w-full rounded-md bg-white py-2 outline-none dark:bg-zinc-800 dark:text-white "
+                    className="w-full rounded-md bg-white p-2 outline-none dark:bg-zinc-800 dark:text-white "
                     value={taskTitle}
                     onChange={(e) => setTaskTitle(e.target.value)}
                     placeholder="What needs to be done?"
@@ -109,13 +109,15 @@ export default function Tasks() {
                 <Button onClick={handleAddTask}>Add Task</Button>
             </div>
 
-            <input
-                type="text"
-                className="w-full rounded-md bg-white px-4 pb-6 outline-none dark:bg-zinc-800 dark:text-white"
-                placeholder="Search tasks..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-            />
+            <div className="px-4 pb-4">
+                <input
+                    type="text"
+                    className="w-full rounded-md bg-white p-2 outline-none  dark:bg-zinc-800 dark:text-white"
+                    placeholder="Search tasks..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                />
+            </div>
 
             <div className="flex gap-2 px-4 pb-2">
                 <Button
