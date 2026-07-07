@@ -95,11 +95,11 @@ export default function Tasks() {
     const isSearching = search.trim() !== '' || filter !== 'all';
 
     return (
-        <section className="mt-8 rounded-lg bg-white shadow">
+        <section className="mt-8 rounded-lg bg-white shadow dark:bg-zinc-900">
             <div className="flex gap-4 items-center p-4">
                 <input
                     type="text"
-                    className="w-full rounded-md bg-white py-2 outline-none"
+                    className="w-full rounded-md bg-white py-2 outline-none dark:bg-zinc-800 dark:text-white "
                     value={taskTitle}
                     onChange={(e) => setTaskTitle(e.target.value)}
                     placeholder="What needs to be done?"
@@ -111,7 +111,7 @@ export default function Tasks() {
 
             <input
                 type="text"
-                className="w-full rounded-md bg-white px-4 pb-6 outline-none"
+                className="w-full rounded-md bg-white px-4 pb-6 outline-none dark:bg-zinc-800 dark:text-white"
                 placeholder="Search tasks..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -170,7 +170,7 @@ export default function Tasks() {
             )}
 
             {filteredTasks.length ? (
-                <div className="grid grid-cols-3 gap-4 p-4 border-t">
+                <div className="grid grid-cols-3 gap-4 p-4 border-t dark:bg-zinc-900 dark:border-zinc-700">
                     <div className="rounded-lg border p-4 text-center">
                         <p className="text-sm text-gray-500">Total</p>
                         <h3 className="text-2xl font-bold">{totalTasks}</h3>
