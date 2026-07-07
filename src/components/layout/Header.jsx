@@ -6,11 +6,9 @@ export default function Header({ theme, setTheme }) {
         <div className="border-b bg-white rounded-lg dark:bg-zinc-900">
             <div className="flex justify-between items-center p-4 ">
                 <div>
-                    <h1 className="text-2xl font-bold">
-                        React Hooks Task Manager
-                    </h1>
+                    <h1 className="text-2xl font-bold">Task Manager</h1>
                     <p className="text-sm ">
-                        Practice React Hooks with a real project
+                        Organize your work. Stay productive.{' '}
                     </p>
                 </div>
 
