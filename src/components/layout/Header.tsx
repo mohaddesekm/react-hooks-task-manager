@@ -1,7 +1,14 @@
 import { Button } from '../ui/button';
 import { Moon, Sun } from 'lucide-react';
+import type { Theme } from '../Task.types';
+import type { Dispatch, SetStateAction } from 'react';
 
-export default function Header({ theme, setTheme }) {
+type HeaderProps = {
+    theme: Theme;
+    setTheme: Dispatch<SetStateAction<Theme>>;
+};
+
+export default function Header({ theme, setTheme }: HeaderProps) {
     return (
         <div className="border-b bg-white rounded-lg dark:bg-zinc-900">
             <div className="flex justify-between items-center p-4 ">
