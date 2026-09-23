@@ -1,16 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import AppLayout from './components/layout/AppLayout';
-import { useEffect } from 'react';
+import type { Theme } from './components/Task.types';
 
 export default function App() {
-    const [theme, setTheme] = useState('light');
+    const [theme, setTheme] = useState<Theme>('light');
     const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
         const savedTheme = localStorage.getItem('theme');
 
-        if (savedTheme) {
+        if (savedTheme === 'light' || savedTheme === 'dark') {
             setTheme(savedTheme);
         }
         setIsLoaded(true);

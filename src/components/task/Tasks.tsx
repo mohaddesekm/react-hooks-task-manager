@@ -2,10 +2,11 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Button } from '../ui/button';
 import TaskItem from './TaskItem';
 import { ClipboardList, SearchX } from 'lucide-react';
+import type { Task as TaskType } from '../Task.types.js';
 
 export default function Tasks() {
     const [taskTitle, setTaskTitle] = useState('');
-    const [tasks, setTasks] = useState([]);
+    const [tasks, setTasks] = useState<TaskType[]>([]);
     const [isLoaded, setIsLoaded] = useState(false);
     const [search, setSearch] = useState('');
     const [filter, setFilter] = useState('all');
@@ -33,7 +34,7 @@ export default function Tasks() {
         const title = taskTitle.trim();
 
         if (title.length > 0) {
-            let newTask = {
+            let newTask: TaskType = {
                 id: crypto.randomUUID(),
                 title,
                 completed: false,
@@ -43,18 +44,18 @@ export default function Tasks() {
         }
     };
 
-    const handlerKeyDown = (event) => {
+    const handlerKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.code === 'Enter') {
             handleAddTask();
         }
     };
 
-    const handlerRemoveTask = useCallback((id) => {
+    const handlerRemoveTask = useCallback((id: string) => {
         setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
     }, []);
 
     const handlerCompleted = useCallback(
-        (id) => {
+        (id: string) => {
             setTasks(
                 tasks.map((task) =>
                     task.id === id
