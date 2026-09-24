@@ -54,6 +54,14 @@ export default function Tasks() {
         setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
     }, []);
 
+    const handlerEditTask = useCallback((id: string, title: string) => {
+        setTasks((prevTasks) =>
+            prevTasks.map((task) =>
+                task.id === id ? { ...task, title } : task,
+            ),
+        );
+    }, []);
+
     const handlerCompleted = useCallback(
         (id: string) => {
             setTasks(
@@ -149,6 +157,7 @@ export default function Tasks() {
                             task={task}
                             onToggle={handlerCompleted}
                             onRemove={handlerRemoveTask}
+                            onEdit={handlerEditTask}
                         />
                     ))}
                 </ul>
