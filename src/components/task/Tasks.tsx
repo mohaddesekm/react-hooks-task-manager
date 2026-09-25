@@ -10,6 +10,11 @@ export default function Tasks() {
     const [isLoaded, setIsLoaded] = useState(false);
     const [search, setSearch] = useState('');
     const [filter, setFilter] = useState('all');
+    const [deletedTask, setDeletedTask] = useState<{
+        task: TaskType;
+        index: number;
+    } | null>(null);
+    const [showUndo, setShowUndo] = useState(false);
 
     // const [tasks, setTasks] = useState(() => {
     //     const savedTasks = localStorage.getItem('tasks');
@@ -51,8 +56,55 @@ export default function Tasks() {
     };
 
     const handlerRemoveTask = useCallback((id: string) => {
-        setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+        setTasks((prevTasks) => {
+            const index = prevTasks.findIndex((task) => task.id === id);
+
+            if (index === -1) return prevTasks;
+
+            const task = prevTasks[index];
+
+            setDeletedTask({
+                task,
+                index,
+            });
+
+            setShowUndo(true);
+
+            return prevTasks.filter((task) => task.id !== id);
+        });
     }, []);
+
+    useEffect(() => {
+        if (!deletedTask) return;
+
+        const timer = setTimeout(() => {
+            setShowUndo(false);
+
+            setTimeout(() => {
+                setDeletedTask(null);
+            }, 300);
+        }, 5000);
+
+        return () => clearTimeout(timer);
+    }, [deletedTask]);
+
+    const handleUndoDelete = useCallback(() => {
+        if (!deletedTask) return;
+
+        setTasks((prevTasks) => {
+            const newTasks = [...prevTasks];
+
+            newTasks.splice(deletedTask.index, 0, deletedTask.task);
+
+            return newTasks;
+        });
+
+        setShowUndo(false);
+
+        setTimeout(() => {
+            setDeletedTask(null);
+        }, 300);
+    }, [deletedTask]);
 
     const handlerEditTask = useCallback((id: string, title: string) => {
         setTasks((prevTasks) =>
@@ -108,7 +160,7 @@ export default function Tasks() {
             <div className="flex gap-4 items-center p-4">
                 <input
                     type="text"
-                    className="w-full rounded-md bg-white p-2 outline-none dark:bg-zinc-800 dark:text-white "
+                    className="w-full rounded-md bg-white p-2 outline-none dark:bg-zinc-800 dark:text-white border border-gray-300 dark:border-none"
                     value={taskTitle}
                     onChange={(e) => setTaskTitle(e.target.value)}
                     placeholder="What needs to be done?"
@@ -121,7 +173,7 @@ export default function Tasks() {
             <div className="px-4 pb-4">
                 <input
                     type="text"
-                    className="w-full rounded-md bg-white p-2 outline-none  dark:bg-zinc-800 dark:text-white"
+                    className="w-full rounded-md bg-white p-2 outline-none  dark:bg-zinc-800 dark:text-white border border-gray-300 dark:border-none"
                     placeholder="Search tasks..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
@@ -201,6 +253,20 @@ export default function Tasks() {
             ) : (
                 ''
             )}
+
+            <div
+                className={`fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-4 rounded-lg border bg-white px-3 py-4 shadow-lg transition-all duration-300 dark:border-zinc-700 dark:bg-zinc-800 ${
+                    showUndo
+                        ? 'translate-y-0 opacity-100'
+                        : 'translate-y-4 opacity-0 pointer-events-none'
+                }`}
+            >
+                <span className="text-sm text-gray-900 dark:text-white">
+                    Task deleted
+                </span>
+
+                <Button onClick={handleUndoDelete}>Undo</Button>
+            </div>
         </section>
     );
 }
